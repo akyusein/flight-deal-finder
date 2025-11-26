@@ -4,7 +4,7 @@ import os
 class FlightSearch:
     def __init__(self, date_range, **kwargs):
         self.base_url = "test.api.amadeus.com/v1/reference-data/locations"
-        self.token_url = kwargs.setdefault("token_url", "https://test.api.amadeus.com")
+        self.token_url = kwargs.setdefault("token_url", "https://test.api.amadeus.com/v1/security/oauth2/token")
         self.city_url = kwargs.setdefault("city_url", "https://test.api.amadeus.com/v1/reference-data/locations/cities")
         self.flight_offer_url = kwargs.setdefault("flight_offer_url", "https://test.api.amadeus.com/v2/shopping/flight-offers")
         self.main_city = "LON"

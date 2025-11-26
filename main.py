@@ -7,7 +7,7 @@ next_date = datetime.now().date() + timedelta(days=50)
 new_date_range = (first_date, next_date)
 
 sheety_data = DataManager()
-flight_data = FlightSearch(date_range=new_date_range, token_url="https://test.api.amadeus.com/v1/security/oauth2/token")
+flight_data = FlightSearch(date_range=new_date_range)
 
 cities = sheety_data.cities()
 
