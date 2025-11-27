@@ -7,7 +7,7 @@ class FlightSearch:
         self.token_url = kwargs.setdefault("token_url", "https://test.api.amadeus.com/v1/security/oauth2/token")
         self.city_url = kwargs.setdefault("city_url", "https://test.api.amadeus.com/v1/reference-data/locations/cities")
         self.flight_offer_url = kwargs.setdefault("flight_offer_url", "https://test.api.amadeus.com/v2/shopping/flight-offers")
-        self.main_city = "LON"
+        self.main_city = kwargs.setdefault("main_city", "LON")
         self.date_range = date_range
         self.api_id = os.environ.get("API_ID")
         self.api_secret = os.environ.get("API_SECRET")
