@@ -54,7 +54,7 @@ class FlightSearch:
             }
             offer_check = requests.get(url=self.flight_offer_url, params=offer_config, headers=token)
             if data := offer_check.json()["data"]:
-                if float(keys["lowestPrice"]) > float(data[0]["price"]["total"]):
+                if float(keys["lowestPrice"]) < float(data[0]["price"]["total"]):
                     available_cities.append(keys["city"])
                     available_data.append(data[0])
         return {k: v for k, v in zip(available_cities, available_data)}

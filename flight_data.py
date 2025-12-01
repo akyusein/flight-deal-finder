@@ -13,11 +13,14 @@ class FlightData:
         for key, value in self.data.items():
             self.destination = key
             self.departure = value["itineraries"][0]["segments"][0]["departure"]
-            self.stops = len(value["itineraries"][0]["segments"])
+            self.stops = len(value["itineraries"][0]["segments"]) - 1
             self.date = self.departure["at"].split("T")[0]
             self.price = value["price"]["total"]
             self.currency = value["price"]["currency"]
-            sentence = f"Available flights to {self.destination} on {self.date}, with total price of {self.price} {self.currency}. The journey has {self.stops} stops"
-            flights.append(sentence)
+            if self.stops > 0:
+                indirect = f"Available flights to {self.destination} on {self.date}, with total price of {self.price} {self.currency}. The journey has {self.stops} stop/s."
+                flights.append(indirect)
+            else:
+                direct = f"Available flights to {self.destination} on {self.date}, with total price of {self.price} {self.currency}. The journey is direct."
+                flights.append(direct)
         print(flights)
-

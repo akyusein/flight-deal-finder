@@ -3,10 +3,13 @@ from flight_search import FlightSearch
 from flight_data import FlightData
 from datetime import datetime, timedelta
 
-date = str(datetime.now().date() + timedelta(days=100))
+date = datetime.now().date() + timedelta(days=50)
+formatted = str(date)
+
+date_format = formatted
 
 sheety_data = DataManager()
-flight_data = FlightSearch(date=date)
+flight_data = FlightSearch(date=date_format)
 
 cities = sheety_data.cities()
 
@@ -20,6 +23,8 @@ except KeyError:
     sheety_data.update_data(iata_codes)
     updated_spreadsheet = sheety_data.get_data()
     updated_final = flight_data.flight_offer(updated_spreadsheet, is_direct="false")
+    new_data = FlightData(updated_final)
+    new_data.get_flights()
 else:
     data = FlightData(final)
     data.get_flights()
