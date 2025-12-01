@@ -2,13 +2,13 @@ import requests
 import os
 
 class FlightSearch:
-    def __init__(self, date_range, **kwargs):
+    def __init__(self, date, **kwargs):
         self.base_url = "test.api.amadeus.com/v1/reference-data/locations"
         self.token_url = kwargs.setdefault("token_url", "https://test.api.amadeus.com/v1/security/oauth2/token")
         self.city_url = kwargs.setdefault("city_url", "https://test.api.amadeus.com/v1/reference-data/locations/cities")
         self.flight_offer_url = kwargs.setdefault("flight_offer_url", "https://test.api.amadeus.com/v2/shopping/flight-offers")
         self.main_city = kwargs.setdefault("main_city", "LON")
-        self.date_range = date_range
+        self.date = date
         self.api_id = os.environ.get("API_ID")
         self.api_secret = os.environ.get("API_SECRET")
 
@@ -39,22 +39,22 @@ class FlightSearch:
             code_cities.append(result)
         return code_cities
 
-    def flight_offer(self, sheety_data):
-        available = []
+    def flight_offer(self, sheety_data, is_direct):
+        available_data = []
+        available_cities = []
         token = self.auth()
         for keys in sheety_data:
             offer_config = {
                 "originLocationCode": self.main_city,
                 "destinationLocationCode": keys["iataCode"],
-                "departureDate": self.date_range,
+                "departureDate": self.date,
+                "nonStop": is_direct,
                 "adults": 1,
                 "max": 10
             }
             offer_check = requests.get(url=self.flight_offer_url, params=offer_config, headers=token)
             if data := offer_check.json()["data"]:
-                price = f'Flight to {keys["city"]} £{data[0]["price"]["total"]}'
                 if float(keys["lowestPrice"]) > float(data[0]["price"]["total"]):
-                    available.append(price)
-            else:
-                print(f"No available flights for {keys["city"]}")
-        return available
+                    available_cities.append(keys["city"])
+                    available_data.append(data[0])
+        return {k: v for k, v in zip(available_cities, available_data)}
